@@ -182,10 +182,12 @@ var FinancialController = Chart.controllers.bar.extend({
 		model.y = horizontal ? ipixels.center : reset ? base : vpixels.head;
 		model.height = horizontal ? ipixels.size : undefined;
 		model.width = horizontal ? undefined : ipixels.size;
-		model.candleOpen = vscale.getPixelForValue(Number(indexData.o));
-		model.candleHigh = vscale.getPixelForValue(Number(indexData.h));
-		model.candleLow = vscale.getPixelForValue(Number(indexData.l));
-		model.candleClose = vscale.getPixelForValue(Number(indexData.c));
+		if (indexData !== null) {
+			model.candleOpen = vscale.getPixelForValue(Number(indexData.o));
+			model.candleHigh = vscale.getPixelForValue(Number(indexData.h));
+			model.candleLow = vscale.getPixelForValue(Number(indexData.l));
+			model.candleClose = vscale.getPixelForValue(Number(indexData.c));
+		}
 	},
 
 	draw: function() {
@@ -199,9 +201,11 @@ var FinancialController = Chart.controllers.bar.extend({
 		Chart.canvasHelpers.clipArea(ctx, this.chart.chartArea);
 
 		for (; i < ilen; ++i) {
-			d = dataset.data[i].o;
-			if (d !== null && d !== undefined && !isNaN(d)) {
-				elements[i].draw();
+			if (dataset.data[i] !== null) {
+				d = dataset.data[i].o;
+				if (d !== null && d !== undefined && !isNaN(d)) {
+					elements[i].draw();
+				}
 			}
 		}
 
